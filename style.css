@@ -1,0 +1,27 @@
+.game-ui {
+  background-color: #282c34;
+  color: white;
+  font-family: 'Arial', sans-serif;
+}
+
+.button {
+  background-color: #61dafb;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.button:hover {
+  background-color: #4fa3bd;
+}
+
+.input {
+  border: 2px solid #61dafb;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px 0;
+  width: 100%;
+}
