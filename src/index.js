@@ -1,29 +1,74 @@
 // src/index.js
 
-// Main entry point for the game engine
-
-// Initialize the engine
 const engine = initializeEngine();
 
-// Load the game configuration
-const gameConfig = loadGameConfiguration();
-
-// Start the engine loop
-engine.start(gameConfig);
+loadGameConfiguration().then((config) => {
+  engine.start(config);
+});
 
 function initializeEngine() {
-    // Implementation to initialize the game engine
-    console.log('Engine initialized');
-    return { start: startEngineLoop };
+  console.log("Engine initialized");
+
+  return {
+    start: startEngineLoop,
+  };
 }
 
-function loadGameConfiguration() {
-    // Implementation to load game configuration
-    console.log('Game configuration loaded');
-    return {};
+async function loadGameConfiguration() {
+  const response = await fetch("./src/config/game.json");
+  const config = await response.json();
+
+  console.log("Game configuration loaded:", config);
+
+  return config;
 }
 
 function startEngineLoop(config) {
-    // Implementation for the engine loop
-    console.log('Engine loop started with config:', config);
+  const root = document.getElementById("root");
+
+  let score = 0;
+
+  function renderGame() {
+    root.innerHTML = "";
+
+    const container = document.createElement("div");
+    container.className = "game-container";
+
+    const header = document.createElement("div");
+    header.className = "header";
+    header.innerText = "Score: " + score;
+
+    const grid = document.createElement("div");
+    grid.className = "grid";
+
+    for (let i = 0; i < config.gridSize * config.gridSize; i++) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      cell.innerText = "?";
+
+      const correct = Math.random() > 0.7;
+
+      cell.onclick = () => {
+        if (correct) {
+          score += config.pointsPerCorrect;
+          renderGame();
+        }
+      };
+
+      grid.appendChild(cell);
+    }
+
+    container.appendChild(header);
+    container.appendChild(grid);
+
+    root.appendChild(container);
+  }
+
+  renderGame();
+
+  function loop() {
+    requestAnimationFrame(loop);
+  }
+
+  loop();
 }
