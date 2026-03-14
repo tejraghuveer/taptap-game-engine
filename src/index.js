@@ -1,29 +1,14 @@
 // src/index.js
 
-const engine = initializeEngine();
+async function startEngine() {
+  console.log("Engine starting...");
 
-loadGameConfiguration().then((config) => {
-  engine.start(config);
-});
-
-function initializeEngine() {
-  console.log("Engine initialized");
-
-  return {
-    start: startEngineLoop,
-  };
-}
-
-async function loadGameConfiguration() {
+  // Load JSON config
   const response = await fetch("./src/config/game.json");
   const config = await response.json();
 
-  console.log("Game configuration loaded:", config);
+  console.log("Loaded config:", config);
 
-  return config;
-}
-
-function startEngineLoop(config) {
   const root = document.getElementById("root");
 
   let score = 0;
@@ -66,9 +51,12 @@ function startEngineLoop(config) {
 
   renderGame();
 
+  // Engine loop
   function loop() {
     requestAnimationFrame(loop);
   }
 
   loop();
 }
+
+startEngine();
